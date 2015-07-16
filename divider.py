@@ -6,16 +6,16 @@ E24 = (1.0, 1.1, 1.2, 1.3, 1.5, 1.6, 1.8, 2.0, 2.2, 2.4, 2.7, 3.0,
 	   3.3, 3.6, 3.9, 4.3, 4.7, 5.1, 5.6, 6.2, 6.8, 7.5, 8.2, 9.1)
 
 def calc_vout(vin, r1, r2):
-	return (r1 / (float(r1) + float(r2))) * vin
+	return (r2 / (float(r1) + float(r2))) * vin
 
 def calc_voltage_divider_resistance_values(vout, vin, value_set=E24):
-	closest_vout = 0
-	closest_r1 = 10
-	closest_r2 = 10
+	closest_vout = None
+	closest_r1 = None
+	closest_r2 = None
 	for i, r1_value in enumerate(value_set):
-		for j, r2_value in enumerate(value_set[i:]):
+		for j, r2_value in enumerate(value_set):
 			new_vout = calc_vout(vin, r1_value, r2_value)
-			if abs(new_vout - vout) < abs(closest_vout - vout):
+			if closest_vout is None or abs(new_vout - vout) < abs(closest_vout - vout):
 				closest_vout = new_vout
 				closest_r1 = r1_value
 				closest_r2 = r2_value
