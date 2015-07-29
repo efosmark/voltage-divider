@@ -1,14 +1,9 @@
-
-E12 = (1.0, 1.2, 1.5, 1.8, 2.2, 2.7,
-	   3.3, 3.9, 4.7, 5.6, 6.8, 8.2)
-
-E24 = (1.0, 1.1, 1.2, 1.3, 1.5, 1.6, 1.8, 2.0, 2.2, 2.4, 2.7, 3.0,
-	   3.3, 3.6, 3.9, 4.3, 4.7, 5.1, 5.6, 6.2, 6.8, 7.5, 8.2, 9.1)
+import eia
 
 def calc_vout(vin, r1, r2):
 	return (r2 / (float(r1) + float(r2))) * vin
 
-def calc_voltage_divider_resistance_values(vout, vin, value_set=E24):
+def calc_voltage_divider_resistance_values(vout, vin, value_set=eia.E24):
 	closest_vout = None
 	closest_r1 = None
 	closest_r2 = None
@@ -30,9 +25,9 @@ if __name__ == '__main__':
 	args = parser.parse_args()
 
 	value_set_name = args.value_set or 'E24'
-	if value_set_name not in ('E12', 'E24'):
-		raise SystemExit('Invalid value set. Mst be either `E12` or `E24`.')
-	value_set = E12 if value_set_name == 'E12' else E24
+	if not hasattr(eia, value_set_name):
+		raise SystemExit('Invalid value set.')
+	value_set = getattr(eia, value_set_name)
 
 	closest_r1, closest_r2 = calc_voltage_divider_resistance_values(args.vout, args.vin, value_set=value_set)
 	
